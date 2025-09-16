@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Search, Music, Drum, Piano, Guitar, Mic, Play, Pause, X, Plus } from 'lucide-react';
-import soundLibraryData from '../../data/soundLibrary.json';
 
 export interface Sound {
   id: string;
@@ -17,20 +16,178 @@ export interface Sound {
   icon: typeof Music | typeof Drum | typeof Piano | typeof Guitar | typeof Mic;
 }
 
-// Icon mapping for JSON data
-const iconMap = {
-  'Drum': Drum,
-  'Music': Music,
-  'Piano': Piano,
-  'Guitar': Guitar,
-  'Mic': Mic
-};
-
-// Convert JSON data to Sound objects with proper icon references
-const soundLibrary: Sound[] = soundLibraryData.map(sound => ({
-  ...sound,
-  icon: iconMap[sound.icon as keyof typeof iconMap]
-}));
+// Professional sound library with actual Sound objects
+const soundLibrary: Sound[] = [
+  // Drums
+  {
+    id: '1',
+    name: 'Trap Kick 808',
+    category: 'Drums',
+    genre: 'Hip Hop',
+    instrument: 'Kick',
+    duration: 0.8,
+    originalBpm: 140,
+    currentBpm: 140,
+    tags: ['kick', '808', 'trap'],
+    color: '#FF6B6B',
+    icon: Drum
+  },
+  {
+    id: '2',
+    name: 'Crisp Snare',
+    category: 'Drums',
+    genre: 'Hip Hop',
+    instrument: 'Snare',
+    duration: 0.3,
+    originalBpm: 140,
+    currentBpm: 140,
+    tags: ['snare', 'trap'],
+    color: '#FF6B6B',
+    icon: Drum
+  },
+  {
+    id: '3',
+    name: 'Closed Hi-Hat',
+    category: 'Drums',
+    genre: 'Hip Hop',
+    instrument: 'Hi-Hat',
+    duration: 0.1,
+    originalBpm: 140,
+    currentBpm: 140,
+    tags: ['hihat', 'closed'],
+    color: '#FF6B6B',
+    icon: Drum
+  },
+  {
+    id: '4',
+    name: 'Open Hi-Hat',
+    category: 'Drums',
+    genre: 'Hip Hop',
+    instrument: 'Hi-Hat',
+    duration: 0.2,
+    originalBpm: 140,
+    currentBpm: 140,
+    tags: ['hihat', 'open'],
+    color: '#FF6B6B',
+    icon: Drum
+  },
+  // Bass
+  {
+    id: '5',
+    name: 'Sub Bass C',
+    category: 'Bass',
+    genre: 'Hip Hop',
+    instrument: '808',
+    duration: 2.0,
+    originalBpm: 140,
+    currentBpm: 140,
+    key: 'C',
+    tags: ['808', 'sub', 'bass'],
+    color: '#8B5CF6',
+    icon: Music
+  },
+  {
+    id: '6',
+    name: 'Reese Bass F',
+    category: 'Bass',
+    genre: 'Electronic',
+    instrument: 'Synth Bass',
+    duration: 1.5,
+    originalBpm: 174,
+    currentBpm: 174,
+    key: 'F',
+    tags: ['reese', 'dnb'],
+    color: '#8B5CF6',
+    icon: Music
+  },
+  // Synths
+  {
+    id: '7',
+    name: 'Trap Lead',
+    category: 'Synths',
+    genre: 'Hip Hop',
+    instrument: 'Lead',
+    duration: 2.0,
+    originalBpm: 140,
+    currentBpm: 140,
+    key: 'C',
+    tags: ['lead', 'trap'],
+    color: '#10B981',
+    icon: Music
+  },
+  {
+    id: '8',
+    name: 'Ambient Pad',
+    category: 'Synths',
+    genre: 'Electronic',
+    instrument: 'Pad',
+    duration: 4.0,
+    originalBpm: 120,
+    currentBpm: 120,
+    key: 'Am',
+    tags: ['pad', 'ambient'],
+    color: '#10B981',
+    icon: Music
+  },
+  // Piano
+  {
+    id: '9',
+    name: 'Lo-Fi Piano',
+    category: 'Piano',
+    genre: 'Hip Hop',
+    instrument: 'Piano',
+    duration: 2.0,
+    originalBpm: 85,
+    currentBpm: 85,
+    key: 'C',
+    tags: ['piano', 'lo-fi'],
+    color: '#F59E0B',
+    icon: Piano
+  },
+  {
+    id: '10',
+    name: 'House Piano',
+    category: 'Piano',
+    genre: 'Electronic',
+    instrument: 'Piano',
+    duration: 2.1,
+    originalBpm: 128,
+    currentBpm: 128,
+    key: 'F',
+    tags: ['piano', 'house'],
+    color: '#F59E0B',
+    icon: Piano
+  },
+  // Guitar
+  {
+    id: '11',
+    name: 'Lo-Fi Guitar',
+    category: 'Guitar',
+    genre: 'Hip Hop',
+    instrument: 'Guitar',
+    duration: 1.5,
+    originalBpm: 85,
+    currentBpm: 85,
+    key: 'C',
+    tags: ['guitar', 'lo-fi'],
+    color: '#EF4444',
+    icon: Guitar
+  },
+  {
+    id: '12',
+    name: 'Rock Guitar',
+    category: 'Guitar',
+    genre: 'Rock',
+    instrument: 'Guitar',
+    duration: 2.0,
+    originalBpm: 120,
+    currentBpm: 120,
+    key: 'Em',
+    tags: ['guitar', 'rock'],
+    color: '#EF4444',
+    icon: Guitar
+  }
+];
 
 interface SoundLibraryProps {
   onSoundSelect: (sound: Sound) => void;
@@ -95,9 +252,9 @@ function SoundLibrary({ onSoundSelect }: SoundLibraryProps) {
   };
 
   return (
-    <div className="bg-gray-900 text-white rounded-2xl h-96 flex flex-col border border-gray-700 shadow-2xl">
+    <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b border-gray-700 bg-gray-800 rounded-t-2xl">
+      <div className="p-4 border-b border-gray-700">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-bold text-white">Sound Library</h2>
           <span className="text-sm text-gray-400 bg-gray-700 px-2 py-1 rounded-full">
@@ -155,8 +312,8 @@ function SoundLibrary({ onSoundSelect }: SoundLibraryProps) {
       </div>
 
       {/* Sound Grid */}
-      <div className="flex-1 overflow-y-auto p-3 scrollbar-thin scrollbar-track-gray-800 scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-500">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+      <div className="flex-1 overflow-y-auto p-3">
+        <div className="grid grid-cols-1 gap-3">
           {filteredSounds.map(sound => {
             const Icon = sound.icon;
             return (
@@ -165,61 +322,40 @@ function SoundLibrary({ onSoundSelect }: SoundLibraryProps) {
                 draggable
                 onDragStart={(e) => handleSoundDragStart(e, sound)}
                 onClick={() => onSoundSelect(sound)}
-                className="group bg-gray-800 hover:bg-gray-700 rounded-xl p-3 cursor-pointer transition-all border border-gray-700 hover:border-yellow-500 hover:shadow-lg"
+                className="group bg-gray-700 hover:bg-gray-600 rounded-lg p-3 cursor-pointer transition-all border border-gray-600 hover:border-yellow-500"
               >
-                {/* Icon and Play Button */}
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-3">
                   <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm"
-                    style={{ backgroundColor: sound.color + '20', border: `1px solid ${sound.color}40` }}
+                    className="w-8 h-8 rounded flex items-center justify-center"
+                    style={{ backgroundColor: sound.color + '40', border: `1px solid ${sound.color}` }}
                   >
                     <Icon className="w-4 h-4" style={{ color: sound.color }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-medium text-white truncate">{sound.name}</h4>
+                    <div className="flex items-center gap-2 text-xs text-gray-400">
+                      <span>{sound.genre}</span>
+                      {sound.key && (
+                        <span className="bg-gray-600 px-1.5 py-0.5 rounded font-mono">
+                          {sound.key}
+                        </span>
+                      )}
+                      <span>{sound.duration}s</span>
+                    </div>
                   </div>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       playSound(sound.id);
                     }}
-                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-600 rounded-lg transition-all"
+                    className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-500 rounded transition-all"
                   >
                     {playingSound === sound.id ? (
-                      <Pause className="w-3 h-3 text-yellow-500" />
+                      <Pause className="w-4 h-4 text-yellow-400" />
                     ) : (
-                      <Play className="w-3 h-3 text-gray-300" />
+                      <Play className="w-4 h-4 text-gray-300" />
                     )}
                   </button>
-                </div>
-
-                {/* Sound Info */}
-                <div className="space-y-1">
-                  <h4 className="text-xs font-medium text-white truncate" title={sound.name}>
-                    {sound.name}
-                  </h4>
-                  <div className="flex items-center justify-between text-xs text-gray-400">
-                    <span className="truncate">{sound.genre}</span>
-                    {sound.key && (
-                      <span className="bg-gray-700 px-1.5 py-0.5 rounded text-xs font-mono">
-                        {sound.key}
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-xs text-gray-500">{sound.duration}s</div>
-                </div>
-
-                {/* BPM Control */}
-                <div className="mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="flex items-center gap-1">
-                    <span className="text-xs text-gray-400 w-8">{sound.currentBpm}</span>
-                    <input
-                      type="range"
-                      min="60"
-                      max="200"
-                      value={sound.currentBpm}
-                      onChange={(e) => updateSoundBpm(sound.id, parseInt(e.target.value))}
-                      onClick={(e) => e.stopPropagation()}
-                      className="flex-1 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-yellow-500"
-                    />
-                  </div>
                 </div>
               </div>
             );
@@ -228,26 +364,19 @@ function SoundLibrary({ onSoundSelect }: SoundLibraryProps) {
 
         {filteredSounds.length === 0 && (
           <div className="text-center py-12 text-gray-500">
-            <Music className="w-12 h-12 mx-auto mb-3 opacity-50" />
+            <Music className="w-8 h-8 mx-auto mb-2 opacity-50" />
             <p className="text-sm">No sounds found</p>
             <button
               onClick={() => {
                 setSelectedFilters([]);
                 setSearchTerm('');
               }}
-              className="mt-2 text-xs text-yellow-500 hover:text-yellow-400 transition-colors"
+              className="mt-2 text-xs text-yellow-400 hover:text-yellow-300 transition-colors"
             >
               Clear all filters
             </button>
           </div>
         )}
-      </div>
-
-      {/* Footer */}
-      <div className="p-3 border-t border-gray-700 bg-gray-800 rounded-b-2xl">
-        <p className="text-xs text-gray-500 text-center">
-          Drag sounds to timeline • Click bubbles to filter • Adjust BPM on hover
-        </p>
       </div>
     </div>
   );

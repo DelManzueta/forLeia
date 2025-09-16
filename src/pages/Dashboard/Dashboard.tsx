@@ -258,11 +258,35 @@ function Dashboard() {
             key={path}
             to={path}
             data-module={path.replace('/', '')}
-            className={`dashboard-link group relative h-full block bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden ${span}`}
+            className={`dashboard-link group relative h-full block bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden ${span}`}
+            style={{ 
+              '--hover-shadow': '0 25px 50px -12px rgba(0, 206, 203, 0.25)',
+              boxShadow: 'var(--shadow-lg)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = 'var(--hover-shadow)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
+            }}
           >
-            <div className={`absolute inset-0 bg-gradient-to-br ${color} opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300`} />
+            <div className="absolute inset-0 opacity-[0.08] group-hover:opacity-[0.15] transition-opacity duration-300" style={{
+              background: path.includes('art') ? 'linear-gradient(to bottom right, var(--color-secondary-400), var(--color-secondary-500))' :
+                         path.includes('coding') ? 'linear-gradient(to bottom right, var(--color-primary-400), var(--color-primary-500))' :
+                         path.includes('language') ? 'linear-gradient(to bottom right, var(--color-primary-400), var(--color-primary-500))' :
+                         path.includes('design') ? 'linear-gradient(to bottom right, var(--color-secondary-400), var(--color-accent-400))' :
+                         path.includes('music') ? 'linear-gradient(to bottom right, var(--color-accent-400), var(--color-accent-500))' :
+                         'linear-gradient(to bottom right, var(--color-primary-400), var(--color-accent-400))'
+            }} />
             <div className="relative h-full flex flex-col">
-              <div className={`inline-block p-3 rounded-xl bg-gradient-to-br ${color} text-white transform group-hover:scale-110 transition-transform duration-300`}>
+              <div className="inline-block p-3 rounded-xl text-white transform group-hover:scale-110 transition-transform duration-300" style={{
+                background: path.includes('art') ? 'linear-gradient(to bottom right, var(--color-secondary-400), var(--color-secondary-500))' :
+                           path.includes('coding') ? 'linear-gradient(to bottom right, var(--color-primary-400), var(--color-primary-500))' :
+                           path.includes('language') ? 'linear-gradient(to bottom right, var(--color-primary-400), var(--color-primary-500))' :
+                           path.includes('design') ? 'linear-gradient(to bottom right, var(--color-secondary-400), var(--color-accent-400))' :
+                           path.includes('music') ? 'linear-gradient(to bottom right, var(--color-accent-400), var(--color-accent-500))' :
+                           'linear-gradient(to bottom right, var(--color-primary-400), var(--color-accent-400))'
+              }}>
                 <Icon className="w-6 h-6" />
               </div>
               <div className="mt-auto">

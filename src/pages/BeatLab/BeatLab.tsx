@@ -16,16 +16,6 @@ interface Sound {
   icon: typeof Music | typeof Drum | typeof Piano | typeof Guitar | typeof Mic;
 }
 
-interface TimelineTrack {
-  id: string;
-  sound: Sound;
-  startTime: number;
-  duration: number;
-  volume: number;
-  muted: boolean;
-  solo: boolean;
-}
-
 const soundLibrary: Sound[] = [
   // Hip Hop Drums
   { id: '1', name: 'Trap Kick 808', category: 'Drums', genre: 'Hip Hop', instrument: 'Kick', duration: 0.8, originalBpm: 140, currentBpm: 140, tags: ['kick', '808', 'trap'], color: '#FF6B6B', icon: Drum },

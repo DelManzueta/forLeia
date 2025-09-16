@@ -183,7 +183,7 @@ function SoundLibrary({ onSoundSelect }: SoundLibraryProps) {
   };
 
   return (
-    <div className="bg-gray-900 text-white rounded-2xl h-96 flex flex-col border border-gray-700 shadow-2xl">
+    <div className="bg-gray-800 text-white rounded-2xl h-96 flex flex-col border border-gray-700 shadow-xl">
       {/* Header */}
       <div className="p-4 border-b border-gray-700 bg-gray-800 rounded-t-2xl">
         <div className="flex items-center justify-between mb-3">
@@ -333,12 +333,32 @@ function SoundLibrary({ onSoundSelect }: SoundLibraryProps) {
 
       {/* Footer */}
       <div className="p-3 border-t border-gray-700 bg-gray-800 rounded-b-2xl">
-        <p className="text-xs text-gray-500 text-center">
-          Drag sounds to timeline • Click bubbles to filter • Adjust BPM on hover
-        </p>
+        <div className="text-xs text-gray-500 text-center">
+          Drag sounds to timeline or click to preview
+        </div>
       </div>
     </div>
   );
+}
+
+interface TrackSound {
+  sound: {
+    id: string;
+    name: string;
+    category: string;
+    genre: string;
+    instrument: string;
+    duration: number;
+    originalBpm: number;
+    currentBpm: number;
+    key?: string;
+    tags: string[];
+    color: string;
+  };
+  startTime: number;
+  volume: number;
+  muted: boolean;
+  solo: boolean;
 }
 
 export default SoundLibrary;

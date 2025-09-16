@@ -207,9 +207,9 @@ function BeatLab() {
       </header>
 
       {/* Main DAW Interface */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Timeline - Takes up most space */}
-        <div className="lg:col-span-3">
+      <div className="space-y-6">
+        {/* Timeline - Full width */}
+        <div>
           <Timeline
             tracks={tracks}
             onTracksChange={setTracks}
@@ -221,44 +221,22 @@ function BeatLab() {
           />
         </div>
 
-        {/* Side Panel */}
-        <div className="space-y-4">
-          {/* Panel Tabs */}
-          <div className="flex gap-2">
-            <button
-              onClick={() => setActivePanel('library')}
-              className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
-                activePanel === 'library'
-                  ? 'bg-yellow-500 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              Library
-            </button>
-            <button
-              onClick={() => setActivePanel('mixer')}
-              className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
-                activePanel === 'mixer'
-                  ? 'bg-yellow-500 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              Mixer
-            </button>
-          </div>
-
-          {/* Panel Content */}
-          {activePanel === 'library' && (
+        {/* Bottom Panel - Sound Library and Mixer */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Sound Library - Takes up 2/3 of space */}
+          <div className="lg:col-span-2">
             <SoundLibrary onSoundSelect={handleSoundSelect} />
-          )}
-          {activePanel === 'mixer' && (
+          </div>
+          
+          {/* Mixer Panel - Takes up 1/3 of space */}
+          <div className="lg:col-span-1">
             <MixerPanel
               tracks={tracks}
               onTracksChange={setTracks}
               masterVolume={masterVolume}
               onMasterVolumeChange={setMasterVolume}
             />
-          )}
+          </div>
         </div>
       </div>
 

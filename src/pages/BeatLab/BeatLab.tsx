@@ -1,12 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { 
-  Play, Pause, Square, RotateCcw, Volume2, VolumeX, Save, Download, 
-  Settings, Music, Drum, Piano, Guitar, Mic, Search, Filter, Trash2, 
-  Copy, Plus, X, Grid, List, Headphones, Layers, Radio, SkipBack, 
-  SkipForward, Record, Repeat, Shuffle, Home, Folder, ChevronDown, 
-  ChevronRight, Eye, EyeOff, Lock, Unlock, MoreHorizontal, Zap,
-  Sparkles, Waveform, Sliders, Maximize2, Minimize2
-} from 'lucide-react';
+import { Play, Pause, Square, RotateCcw, Volume2, VolumeX, Save, Download, Settings, Music, Drum, Piano, Guitar, Mic, Search, Filter, Trash2, Copy, Plus, X, Grid, List, Headphones, Layers, Radio, SkipBack, SkipForward, SwordIcon as Record, Repeat, Shuffle, Home, Folder, ChevronDown, ChevronRight, Eye, EyeOff, Lock, Unlock, MoreHorizontal, Zap, Sparkles, AudioWaveform as Waveform, Sliders, Maximize2, Minimize2 } from 'lucide-react';
 
 interface Sound {
   id: string;

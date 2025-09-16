@@ -219,40 +219,40 @@ function SoundLibrary({ onSoundSelect }: SoundLibraryProps) {
                   {filter}
                   <X className="w-3 h-3" />
                 </button>
-      <div className="bg-gradient-to-br from-yellow-400 to-amber-500 rounded-3xl p-6 text-white shadow-2xl border border-yellow-300">
+              ))}
             </div>
-          <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm shadow-lg">
+          )}
           
           {/* Available Filters */}
           <div className="flex flex-wrap gap-2 max-h-16 overflow-y-auto scrollbar-thin scrollbar-track-gray-800 scrollbar-thumb-gray-600">
             {filterOptions
               .filter(option => !selectedFilters.includes(option.value))
-          <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/10">
               .map(option => (
                 <button
                   key={option.value}
-          <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/10">
+                  onClick={() => addFilter(option.value)}
                   className="flex items-center gap-1 px-3 py-1 bg-gray-700 text-gray-300 rounded-full text-xs font-medium hover:bg-gray-600 transition-colors"
                 >
                   <Plus className="w-3 h-3" />
-          <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/10">
+                  {option.label}
                 </button>
               ))}
           </div>
         </div>
+      </div>
 
       {/* Sound Grid */}
       <div className="flex-1 overflow-y-auto p-3 scrollbar-thin scrollbar-track-gray-800 scrollbar-thumb-gray-600 hover:scrollbar-thumb-gray-500">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
           {filteredSounds.map(sound => {
             const Icon = sound.icon;
-              className="px-3 py-2 bg-gray-800 text-white rounded-xl border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 shadow-inner"
+            return (
               <div
                 key={sound.id}
                 draggable
                 onDragStart={(e) => handleSoundDragStart(e, sound)}
                 onClick={() => onSoundSelect(sound)}
-                className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 transition-colors shadow-lg"
+                className="group bg-gray-700 hover:bg-gray-600 rounded-xl p-3 cursor-pointer transition-all duration-200 hover:scale-105 border border-gray-600 hover:border-gray-500 shadow-lg hover:shadow-xl"
               >
                 {/* Icon and Play Button */}
                 <div className="flex items-center justify-between mb-2">
@@ -317,11 +317,11 @@ function SoundLibrary({ onSoundSelect }: SoundLibraryProps) {
           <div className="text-center py-12 text-gray-500">
             <Music className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p className="text-sm">No sounds found</p>
-              <button className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-xl hover:bg-gray-600 transition-colors shadow-lg">
+            <button
               onClick={() => {
                 setSelectedFilters([]);
                 setSearchTerm('');
-              <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-lg">
+              }}
               className="mt-2 text-xs text-yellow-500 hover:text-yellow-400 transition-colors"
             >
               Clear all filters

@@ -20,7 +20,7 @@ import TaskMaster from './pages/TaskMaster/TaskMaster';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
+      <div className="min-h-screen flex flex-col" style={{ background: 'var(--color-background)' }}>
         <Navbar />
         <main className="flex-1 container mx-auto px-4 pt-20 pb-8">
           <Routes>

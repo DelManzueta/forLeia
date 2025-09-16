@@ -53,11 +53,11 @@ function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-white/20">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-neutral-200/20" style={{ borderColor: 'var(--color-border)' }}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2 text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-            <Sparkles className="w-6 h-6 text-emerald-600" />
+          <Link to="/" className="flex items-center gap-2 text-2xl font-bold bg-gradient-to-r from-robin-egg-blue to-bittersweet bg-clip-text text-transparent" style={{ background: 'linear-gradient(to right, var(--color-primary-500), var(--color-secondary-500))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            <Sparkles className="w-6 h-6" style={{ color: 'var(--color-primary-500)' }} />
             CreativeQuest
           </Link>
 

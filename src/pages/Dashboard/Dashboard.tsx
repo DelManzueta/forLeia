@@ -111,33 +111,35 @@ function Dashboard() {
           {/* Left Column - Welcome and Stats */}
           <div className="space-y-6 p-8">
             {/* Welcome Section */}
-            <header className="text-center p-8 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-3xl">
+            <header className="text-center p-8 rounded-3xl" style={{ background: 'linear-gradient(to bottom right, var(--color-primary-500), var(--color-accent-400))', backgroundSize: '100% 100%', opacity: 0.1 }}>
+              <div className="relative z-10">
               <div className="relative">
                 <div className="flex items-center justify-center gap-2 mb-6">
-                  <Sparkles className="w-8 h-8 text-emerald-500 animate-bounce" />
-                  <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-600 bg-clip-text text-transparent">
+                  <Sparkles className="w-8 h-8 animate-bounce" style={{ color: 'var(--color-primary-500)' }} />
+                  <h1 className="text-4xl font-bold bg-gradient-to-r bg-clip-text text-transparent" style={{ background: 'linear-gradient(to right, var(--color-primary-600), var(--color-secondary-500), var(--color-accent-500))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                     Welcome back, Leia!
                   </h1>
                 </div>
-                <p className="text-xl text-emerald-700 animate-pulse">Ready for today's creative adventure?</p>
+                <p className="text-xl animate-pulse" style={{ color: 'var(--color-primary-700)' }}>Ready for today's creative adventure?</p>
+              </div>
               </div>
             </header>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-emerald-50 rounded-2xl p-4">
+              <div className="rounded-2xl p-4" style={{ backgroundColor: 'var(--color-primary-50)' }}>
                 <div className="flex items-center gap-2 mb-2">
-                  <Star className="w-5 h-5 text-emerald-500" />
-                  <span className="font-medium text-emerald-700">Daily Streak</span>
+                  <Star className="w-5 h-5" style={{ color: 'var(--color-primary-500)' }} />
+                  <span className="font-medium" style={{ color: 'var(--color-primary-700)' }}>Daily Streak</span>
                 </div>
-                <p className="text-2xl font-bold text-emerald-800">7 Days</p>
+                <p className="text-2xl font-bold" style={{ color: 'var(--color-primary-800)' }}>7 Days</p>
               </div>
-              <div className="bg-emerald-50 rounded-2xl p-4">
+              <div className="rounded-2xl p-4" style={{ backgroundColor: 'var(--color-accent-50)' }}>
                 <div className="flex items-center gap-2 mb-2">
-                  <Target className="w-5 h-5 text-emerald-500" />
-                  <span className="font-medium text-emerald-700">Goals Met</span>
+                  <Target className="w-5 h-5" style={{ color: 'var(--color-accent-500)' }} />
+                  <span className="font-medium" style={{ color: 'var(--color-accent-700)' }}>Goals Met</span>
                 </div>
-                <p className="text-2xl font-bold text-emerald-800">12/15</p>
+                <p className="text-2xl font-bold" style={{ color: 'var(--color-accent-800)' }}>12/15</p>
               </div>
             </div>
 

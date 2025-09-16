@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Trash2, Copy, Settings, Solo } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Trash2, Copy, Settings, Bold as Solo } from 'lucide-react';
 import type { AudioTrack } from './AudioEngine';
 
 interface ProfessionalTimelineProps {

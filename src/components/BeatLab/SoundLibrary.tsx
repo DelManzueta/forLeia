@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Search, Music, Drum, Piano, Guitar, Mic, Play, Pause, X, Plus } from 'lucide-react';
 import soundLibraryData from '../../data/soundLibrary.json';
 
-interface Sound {
+export interface Sound {
   id: string;
   name: string;
   category: string;

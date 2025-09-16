@@ -1,38 +1,44 @@
-import React, { useState } from 'react';
-import { Play, Pause, Square, RotateCcw, Volume2, Settings } from 'lucide-react';
-import SoundLibrary, { type Sound } from '../../components/BeatLab/SoundLibrary';
-import Timeline from '../../components/BeatLab/Timeline';
+import React, { useState, useCallback } from 'react';
+import { Play, Pause, Square, RotateCcw, Volume2, Settings, Save, Download, Upload } from 'lucide-react';
+import ProfessionalSoundLibrary, { type Sound } from '../../components/BeatLab/ProfessionalSoundLibrary';
+import ProfessionalTimeline from '../../components/BeatLab/ProfessionalTimeline';
+import AudioEngineComponent, { type AudioTrack, audioEngine } from '../../components/BeatLab/AudioEngine';
 import BeatPad from '../../components/BeatLab/BeatPad';
 import MyBeats from '../../components/BeatLab/MyBeats';
 import VoiceRecorder from '../../components/BeatLab/VoiceRecorder';
 
-interface TimelineTrack {
-  id: string;
-  sound: Sound;
-  startTime: number;
-  volume: number;
-  muted: boolean;
-  position: number;
-}
-
 function BeatLab() {
-  const [tracks, setTracks] = useState<TimelineTrack[]>([]);
+  const [tracks, setTracks] = useState<AudioTrack[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [bpm, setBpm] = useState(120);
-  const [activeView, setActiveView] = useState<'library' | 'timeline' | 'beatpad' | 'mybeats' | 'recorder'>('library');
+  const [masterVolume, setMasterVolume] = useState(0.8);
+  const [activeView, setActiveView] = useState<'library' | 'timeline' | 'beatpad' | 'mybeats' | 'recorder'>('timeline');
+  const [projectName, setProjectName] = useState('Untitled Project');
 
-  const handleSoundSelect = (sound: Sound) => {
-    const newTrack: TimelineTrack = {
+  const handleSoundSelect = useCallback(async (sound: Sound) => {
+    // Create audio buffer for the sound
+    const audioBuffer = audioEngine.createDummyBuffer(sound.duration);
+    
+    const newTrack: AudioTrack = {
       id: `track-${Date.now()}`,
-      sound,
+      name: sound.name,
+      audioBuffer,
       startTime: currentTime,
+      duration: sound.duration,
       volume: 1,
       muted: false,
-      position: currentTime * 40 // Convert time to pixels
+      solo: false,
+      color: sound.color
     };
-    setTracks([...tracks, newTrack]);
-  };
+    
+    setTracks(prev => [...prev, newTrack]);
+    
+    // Switch to timeline view to show the new track
+    if (activeView !== 'timeline') {
+      setActiveView('timeline');
+    }
+  }, [currentTime, activeView]);
 
   const handlePlay = () => {
     setIsPlaying(!isPlaying);
@@ -49,18 +55,55 @@ function BeatLab() {
     setIsPlaying(false);
   };
 
+  const handleSeek = (time: number) => {
+    setCurrentTime(time);
+  };
+
+  const handleTimeUpdate = useCallback((time: number) => {
+    setCurrentTime(time);
+  }, []);
+
+  const handleMasterVolumeChange = (volume: number) => {
+    setMasterVolume(volume);
+    audioEngine.setMasterVolume(volume);
+  };
+
+  const saveProject = () => {
+    const project = {
+      name: projectName,
+      tracks,
+      bpm,
+      masterVolume,
+      createdAt: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${projectName}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportProject = () => {
+    // In a real implementation, this would render the audio to a file
+    alert('Export functionality would render your project to an audio file (WAV/MP3)');
+  };
+
   const renderActiveView = () => {
     switch (activeView) {
       case 'library':
-        return <SoundLibrary onSoundSelect={handleSoundSelect} />;
+        return <ProfessionalSoundLibrary onSoundSelect={handleSoundSelect} />;
       case 'timeline':
         return (
-          <Timeline
+          <ProfessionalTimeline
             tracks={tracks}
             onTracksChange={setTracks}
             isPlaying={isPlaying}
             currentTime={currentTime}
             bpm={bpm}
+            onSeek={handleSeek}
           />
         );
       case 'beatpad':
@@ -70,15 +113,43 @@ function BeatLab() {
       case 'recorder':
         return <VoiceRecorder />;
       default:
-        return <SoundLibrary onSoundSelect={handleSoundSelect} />;
+        return <ProfessionalSoundLibrary onSoundSelect={handleSoundSelect} />;
     }
   };
 
   return (
-    <div className="space-y-8">
-      <header className="text-center">
-        <h1 className="text-4xl font-bold text-yellow-600">Beat Lab</h1>
-        <p className="mt-2 text-yellow-600/80">Create amazing beats! 🎵</p>
+    <div className="space-y-6 bg-gray-100 min-h-screen">
+      {/* Header */}
+      <header className="bg-white rounded-3xl p-6 shadow-lg">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Beat Lab</h1>
+            <p className="text-gray-600 mt-1">Professional music production studio</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <input
+              type="text"
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
+              className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Project name..."
+            />
+            <button
+              onClick={saveProject}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              <Save className="w-4 h-4" />
+              Save
+            </button>
+            <button
+              onClick={exportProject}
+              className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+            >
+              <Download className="w-4 h-4" />
+              Export
+            </button>
+          </div>
+        </div>
       </header>
 
       {/* Transport Controls */}
@@ -87,49 +158,65 @@ function BeatLab() {
           <div className="flex items-center gap-4">
             <button
               onClick={handlePlay}
-              className="flex items-center justify-center w-12 h-12 bg-yellow-500 hover:bg-yellow-400 rounded-full transition-colors"
+              className="flex items-center justify-center w-14 h-14 bg-blue-500 hover:bg-blue-400 rounded-full transition-colors shadow-lg"
             >
               {isPlaying ? (
-                <Pause className="w-6 h-6 text-white" />
+                <Pause className="w-7 h-7 text-white" />
               ) : (
-                <Play className="w-6 h-6 text-white ml-1" />
+                <Play className="w-7 h-7 text-white ml-1" />
               )}
             </button>
             <button
               onClick={handleStop}
-              className="flex items-center justify-center w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors"
+              className="flex items-center justify-center w-12 h-12 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors"
             >
-              <Square className="w-5 h-5 text-gray-700" />
+              <Square className="w-6 h-6 text-gray-700" />
             </button>
             <button
               onClick={handleReset}
-              className="flex items-center justify-center w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors"
+              className="flex items-center justify-center w-12 h-12 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors"
+              title="Clear all tracks"
             >
-              <RotateCcw className="w-5 h-5 text-gray-700" />
+              <RotateCcw className="w-6 h-6 text-gray-700" />
             </button>
+            
+            {/* Time Display */}
+            <div className="bg-gray-900 text-white px-4 py-2 rounded-lg font-mono">
+              {Math.floor(currentTime / 60)}:{(currentTime % 60).toFixed(1).padStart(4, '0')}
+            </div>
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">BPM:</span>
+            {/* BPM Control */}
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-600 font-medium">BPM:</span>
               <input
                 type="number"
                 value={bpm}
-                onChange={(e) => setBpm(parseInt(e.target.value))}
-                className="w-16 px-2 py-1 border border-gray-200 rounded text-center text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                onChange={(e) => setBpm(parseInt(e.target.value) || 120)}
+                className="w-20 px-3 py-2 border border-gray-200 rounded-lg text-center text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 min="60"
                 max="200"
               />
             </div>
-            <div className="flex items-center gap-2">
-              <Volume2 className="w-4 h-4 text-gray-600" />
+            
+            {/* Master Volume */}
+            <div className="flex items-center gap-3">
+              <Volume2 className="w-5 h-5 text-gray-600" />
               <input
                 type="range"
                 min="0"
-                max="100"
-                className="w-20 accent-yellow-500"
+                max="1"
+                step="0.1"
+                value={masterVolume}
+                onChange={(e) => handleMasterVolumeChange(parseFloat(e.target.value))}
+                className="w-24 accent-blue-500"
               />
+              <span className="text-sm text-gray-600 w-8">
+                {Math.round(masterVolume * 100)}
+              </span>
             </div>
+            
             <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
               <Settings className="w-5 h-5 text-gray-600" />
             </button>
@@ -140,21 +227,22 @@ function BeatLab() {
       {/* View Tabs */}
       <div className="flex gap-2 p-1 bg-white rounded-xl shadow-sm">
         {[
-          { id: 'library', label: 'Sound Library' },
-          { id: 'timeline', label: 'Timeline' },
-          { id: 'beatpad', label: 'Beat Pad' },
-          { id: 'mybeats', label: 'My Beats' },
-          { id: 'recorder', label: 'Voice Recorder' }
+          { id: 'timeline', label: 'Timeline', emoji: '🎼' },
+          { id: 'library', label: 'Sound Library', emoji: '🎵' },
+          { id: 'beatpad', label: 'Beat Pad', emoji: '🥁' },
+          { id: 'mybeats', label: 'My Beats', emoji: '💾' },
+          { id: 'recorder', label: 'Voice Recorder', emoji: '🎤' }
         ].map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveView(tab.id as any)}
-            className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-colors ${
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
               activeView === tab.id
-                ? 'bg-yellow-100 text-yellow-700'
+                ? 'bg-blue-100 text-blue-700 shadow-sm'
                 : 'text-gray-600 hover:bg-gray-50'
             }`}
           >
+            <span>{tab.emoji}</span>
             {tab.label}
           </button>
         ))}
@@ -166,21 +254,32 @@ function BeatLab() {
       </div>
 
       {/* Status Bar */}
-      {tracks.length > 0 && (
-        <div className="bg-white rounded-xl p-4 shadow-sm">
-          <div className="flex items-center justify-between text-sm text-gray-600">
-            <div className="flex items-center gap-4">
-              <span>Tracks: {tracks.length}</span>
-              <span>Time: {Math.floor(currentTime / 60)}:{(currentTime % 60).toString().padStart(2, '0')}</span>
-              <span>BPM: {bpm}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-green-500' : 'bg-gray-400'}`}></div>
-              <span>{isPlaying ? 'Playing' : 'Stopped'}</span>
-            </div>
+      <div className="bg-white rounded-xl p-4 shadow-sm">
+        <div className="flex items-center justify-between text-sm text-gray-600">
+          <div className="flex items-center gap-6">
+            <span className="flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`}></div>
+              {isPlaying ? 'Playing' : 'Stopped'}
+            </span>
+            <span>Tracks: {tracks.length}</span>
+            <span>BPM: {bpm}</span>
+            <span>Sample Rate: 44.1kHz</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <span>Master: {Math.round(masterVolume * 100)}%</span>
+            <span className="text-blue-600 font-medium">{projectName}</span>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Audio Engine */}
+      <AudioEngineComponent
+        tracks={tracks}
+        isPlaying={isPlaying}
+        currentTime={currentTime}
+        bpm={bpm}
+        onTimeUpdate={handleTimeUpdate}
+      />
     </div>
   );
 }

@@ -1,33 +1,35 @@
 import React, { useState } from 'react';
 import { Play, Pause, Square, RotateCcw, Volume2, Settings } from 'lucide-react';
-import SoundLibrary from '../../components/BeatLab/SoundLibrary';
+import SoundLibrary, { type Sound } from '../../components/BeatLab/SoundLibrary';
+import Timeline from '../../components/BeatLab/Timeline';
 import BeatPad from '../../components/BeatLab/BeatPad';
 import MyBeats from '../../components/BeatLab/MyBeats';
 import VoiceRecorder from '../../components/BeatLab/VoiceRecorder';
-import type { Sound } from '../../components/BeatLab/SoundLibrary';
 
-interface Track {
+interface TimelineTrack {
   id: string;
   sound: Sound;
   startTime: number;
   volume: number;
   muted: boolean;
+  position: number;
 }
 
 function BeatLab() {
-  const [tracks, setTracks] = useState<Track[]>([]);
+  const [tracks, setTracks] = useState<TimelineTrack[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [bpm, setBpm] = useState(120);
-  const [activeView, setActiveView] = useState<'library' | 'beatpad' | 'mybeats' | 'recorder'>('library');
+  const [activeView, setActiveView] = useState<'library' | 'timeline' | 'beatpad' | 'mybeats' | 'recorder'>('library');
 
   const handleSoundSelect = (sound: Sound) => {
-    const newTrack: Track = {
+    const newTrack: TimelineTrack = {
       id: `track-${Date.now()}`,
       sound,
       startTime: currentTime,
       volume: 1,
-      muted: false
+      muted: false,
+      position: currentTime * 40 // Convert time to pixels
     };
     setTracks([...tracks, newTrack]);
   };
@@ -51,6 +53,16 @@ function BeatLab() {
     switch (activeView) {
       case 'library':
         return <SoundLibrary onSoundSelect={handleSoundSelect} />;
+      case 'timeline':
+        return (
+          <Timeline
+            tracks={tracks}
+            onTracksChange={setTracks}
+            isPlaying={isPlaying}
+            currentTime={currentTime}
+            bpm={bpm}
+          />
+        );
       case 'beatpad':
         return <BeatPad />;
       case 'mybeats':
@@ -129,6 +141,7 @@ function BeatLab() {
       <div className="flex gap-2 p-1 bg-white rounded-xl shadow-sm">
         {[
           { id: 'library', label: 'Sound Library' },
+          { id: 'timeline', label: 'Timeline' },
           { id: 'beatpad', label: 'Beat Pad' },
           { id: 'mybeats', label: 'My Beats' },
           { id: 'recorder', label: 'Voice Recorder' }
